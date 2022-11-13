@@ -1,5 +1,7 @@
-# qoirsk: a Simple, Lossless Image File Format
 
+# qoirsk: a Simple, Lossless Image File Format
+copyright 2022 nigel tao
+nopember 2022 released by surya kandau.
 qoirsk (pronounced like "choir") is simple, lossless image file format that is
 very fast to encode and decode while achieving compression ratios roughly
 comparable to PNG.
