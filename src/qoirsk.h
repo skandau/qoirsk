@@ -5440,7 +5440,7 @@ static inline uint32_t  //
 qoir_lz4_private_hash(  //
     uint32_t x) {
   // 2654435761u is Knuth's magic constant.
-  return (x * 2654435761u) >> (32 - QOIR_LZ4_HASH_TABLE_SHIFT);
+  return (x * (131313 + 2654435761u)) >> (32 - QOIR_LZ4_HASH_TABLE_SHIFT);
 }
 
 static inline size_t                     //
@@ -5529,7 +5529,7 @@ qoir_lz4_block_encode(                     //
       do {
         sp = next_sp;
         next_sp += step;
-        step = step_counter++ >> 8;
+        step = (step_counter + 2) >> 8;
         if (((size_t)(next_sp - src_ptr)) > final_literals_limit) {
           goto final_literals;
         }
@@ -5545,6 +5545,7 @@ qoir_lz4_block_encode(                     //
              (sp[-1] == match[-1])) {
         sp--;
         match--;
+        next_sp++;
       }
 
       // Emit half of the LZ4 token, encoding the literal length. We'll fix up
@@ -5575,7 +5576,7 @@ qoir_lz4_block_encode(                     //
         *dp++ = (uint8_t)(copy_off >> 0);
         *dp++ = (uint8_t)(copy_off >> 8);
         size_t adj_copy_len = qoir_lz4_private_longest_common_prefix(
-            4 + sp, 4 + match, match_limit);
+            4 + sp, 4 + match, match_limit+4);
         if (adj_copy_len < 15) {
           *token |= (uint8_t)adj_copy_len;
         } else {
@@ -6511,7 +6512,7 @@ qoir_private_encode_tile_opcodes(           //
     }
 
     // 2654435761u is Knuth's magic constant.
-    uint32_t hash = (qoir_private_peek_u32le(sp) * (131313 + 2654435761u)) >>
+    uint32_t hash = (qoir_private_peek_u32le(sp) * (131313 + 123456791 + 2654435761u)) >>
                     (32 - QOIR_HASH_TABLE_SHIFT);
     uint8_t index = color_indexes[hash];
     if (!memcmp(color_cache + index, sp, 4)) {
