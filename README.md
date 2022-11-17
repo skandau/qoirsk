@@ -102,7 +102,7 @@ j40_next_frame`.
 PNG/Wuffs encoder. The "compression ratio" numbers simply take the benchmark
 suite PNG images "as is" without re-encoding.
 
----
+
                        input size    qoirsk     comp_time   decomp_time    
 kodim01.png            694,365       694,330    0.063s      0.125s    
 kodim02.png            605,719       607,354    0.046s      0.140s  
@@ -135,7 +135,7 @@ clover.png           2,582,326     2,488,818    0.110s      0.344s
 grass1.png           2,851,919     2,661,488    0.078s      0.343s
 IMGP5482_seamless.png 2,212,110    2,018,303    0.094s      0.313s
 mod_screen1j.png         4,829         7,165    0.047s      0.015s
----
+
    
 ### Lossy Benchmarks
 
