@@ -1,5 +1,7 @@
-# qoirsk: a Simple, Lossless Image File Format
 
+# qoirsk: a Simple, Lossless Image File Format
+copyright 2022 nigel tao
+nopember 2022 released by surya kandau.
 qoirsk (pronounced like "choir") is simple, lossless image file format that is
 very fast to encode and decode while achieving compression ratios roughly
 comparable to PNG.
@@ -100,12 +102,40 @@ j40_next_frame`.
 PNG/Wuffs encoder. The "compression ratio" numbers simply take the benchmark
 suite PNG images "as is" without re-encoding.
 
-                       input_size          original_qoir      qoirsk            qoi
 ---
-wikipedia_008.png       1,344,960           1,452,626         1,452,062       1,521,134   
-dice.png                 349,827             337,811           333,837         519,653 
-kodim10.png              593,463             591,584           589,666         652,383
-kodim23.png              557,596             608,884           606,365         675,251
+                       input size    qoirsk     comp_time   decomp_time    
+kodim01.png            694,365       694,330    0.063s      0.125s    
+kodim02.png            605,719       607,354    0.046s      0.140s  
+kodim03.png            482,155       496,117    0.047s      0.141s
+kodim04.png            610,087       635,092    0.046s      0.140s
+kodim05.png            758,418       759,242    0.047s      0.140s
+kodim06.png            591,345       609,184    0.078s      0.125s          
+kodim07.png            539,172       556,387    0.046s      0.140s 
+kodim08.png            746,389       789,206    0.062s      0.141s
+kodim09.png            561,120       552,440    0.047s      0.125s
+kodim10.png            567,930       589,767    0.047s      0.141s
+kodim11.png            601,411       611,644    0.046s      0.125s
+kodim12.png            508,938       518,930    0.047s      0.125s
+kodim13.png            803,553       789,293    0.046s      0.141s 
+kodim14.png            669,142       677,872    0.047s      0.125s 
+kodim15.png            574,072       603,778    0.047s      0.140s
+kodim16.png            507,174       535,726    0.047s      0.125s
+kodim17.png            578,568       593,599    0.046s      0.140s 
+pk01_door01_add.png      3,220         5,979    0.015s      0.031s
+pk01_door01_local.png   73,467       105,617    0.031s      0.047s 
+pk01_door01_s.png       74,021       126,558    0.031s      0.031s 
+pk01_door01a_d.png     219,672       253,462    0.031s      0.078s
+pk01_door01b_d.png     235,926       263,265    0.047s      0.078s
+pk01_floor01_s.png     183,438       300,241    0.047s      0.079s
+pk01_floor01a_d.png    454,077       483,273    0.047s      0.094s
+pk01_floor01b_d.png    511,058       576,245    0.062s      0.109s
+pk01_floor02_local.png  67,734       133,719    0.032s      0.047s
+pk01_floor02_s.png      46,811        84,057    0.016s      0.031s
+clover.png           2,582,326     2,488,818    0.110s      0.344s
+grass1.png           2,851,919     2,661,488    0.078s      0.343s
+IMGP5482_seamless.png 2,212,110    2,018,303    0.094s      0.313s
+mod_screen1j.png         4,829         7,165    0.047s      0.015s
+---
    
 ### Lossy Benchmarks
 
