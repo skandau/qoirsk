@@ -143,6 +143,42 @@ qoirskv2:
 dice.png                  349,827    333,852    0.062s      0.094s
 fish.png                  447,419    615,449    0.094s      0.328s
 
+qoirskv3:
+                       input size    qoirsk     comp_time   decomp_time    
+kodim01.png            694,365       694,236    0.047s      0.141s    
+kodim02.png            605,719       607,329    0.078s      0.125s  
+kodim03.png            482,155       496,028    0.078s      0.141s
+kodim04.png            610,087       635,030    0.062s      0.141s
+kodim05.png            758,418       759,186    0.094s      0.140s
+kodim06.png            591,345       609,159    0.062s      0.125s          
+kodim07.png            539,172       556,294    0.078s      0.141s 
+kodim08.png            746,389       789,144    0.078s      0.140s
+kodim09.png            561,120       552,384    0.062s      0.156s
+kodim10.png            567,930       589,691    0.062s      0.172s
+kodim11.png            601,411       611,538    0.063s      0.125s
+kodim12.png            508,938       518,898    0.062s      0.125s
+kodim13.png            803,553       789,273    0.094s      0.125s 
+kodim14.png            669,142       677,835    0.062s      0.157s 
+kodim15.png            574,072       603,725    0.078s      0.140s
+kodim16.png            507,174       535,716    0.063s      0.141s
+kodim17.png            578,568       593,556    0.047s      0.125s 
+pk01_door01_add.png      3,220         5,923    0.032s      0.032s
+pk01_door01_local.png   73,467       105,481    0.031s      0.031s 
+pk01_door01_s.png       74,021       126,551    0.047s      0.047s 
+pk01_door01a_d.png     219,672       253,461    0.047s      0.078s
+pk01_door01b_d.png     235,926       263,264    0.046s      0.062s
+pk01_floor01_s.png     183,438       300,224    0.062s      0.063s
+pk01_floor01a_d.png    454,077       483,273    0.046s      0.094s
+pk01_floor01b_d.png    511,058       576,245    0.047s      0.109s
+pk01_floor02_local.png  67,734       133,556    0.046s      0.046s
+pk01_floor02_s.png      46,811        84,049    0.046s      0.031s
+clover.png           2,582,326     2,488,692    0.109s      0.344s
+grass1.png           2,851,919     2,661,471    0.125s      0.375s
+IMGP5482_seamless.png 2,212,110    2,017,453    0.125s      0.296s
+mod_screen1j.png         4,829         7,138    0.031s      0.031s
+dice.png               349,827       333,468    0.063s      0.094s
+fish.png               447,419       614,998    0.125s      0.328s
+
    
 ### Lossy Benchmarks
 
