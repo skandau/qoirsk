@@ -5440,7 +5440,7 @@ static inline uint32_t  //
 qoir_lz4_private_hash(  //
     uint32_t x) {
   // 2654435761u is Knuth's magic constant.
-  return (x * 2654435761u) >> (32 - QOIR_LZ4_HASH_TABLE_SHIFT);
+  return ((x + 131313 ) * 2654435761u) >> (32 - QOIR_LZ4_HASH_TABLE_SHIFT);
 }
 
 static inline size_t                     //
@@ -5505,8 +5505,8 @@ qoir_lz4_block_encode(                     //
   // last match must start at least 12 bytes before the end of block" and other
   // file format details, such as the LZ4 token's bit patterns.
   if (src_len > 12) {
-    const uint8_t* const match_limit = src_ptr + src_len - 4;
-    const size_t final_literals_limit = src_len - 10;
+    const uint8_t* const match_limit = src_ptr + src_len - 2;
+    const size_t final_literals_limit = src_len - 5;
 
     // hash_table maps from QOIR_LZ4_HASH_TABLE_SHIFT-bit keys to 32-bit
     // values. Each value is an offset o, relative to src_ptr, initialized to
@@ -5545,6 +5545,7 @@ qoir_lz4_block_encode(                     //
              (sp[-1] == match[-1])) {
         sp--;
         match--;
+        next_sp++;
       }
 
       // Emit half of the LZ4 token, encoding the literal length. We'll fix up
@@ -6414,6 +6415,10 @@ qoir_private_encode_dither(     //
   uint32_t m = ((256 * (p - l)) > (noise * (u - l))) ? u : l;
   *ptr = (uint8_t)(m >> lossiness);
 }
+static inline int rotl (int v,int c)
+{
+	return (v<<c)|(v>>(32-c));
+}
 
 static QOIR_ALWAYS_INLINE qoir_size_result  //
 qoir_private_encode_tile_opcodes(           //
@@ -6511,7 +6516,7 @@ qoir_private_encode_tile_opcodes(           //
     }
 
     // 2654435761u is Knuth's magic constant.
-    uint32_t hash = (qoir_private_peek_u32le(sp) * (131313 + 2654435761u)) >>
+    uint32_t hash = (qoir_private_peek_u32le(sp) * (131313 + 123456791 + 2654435761u)) >>
                     (32 - QOIR_HASH_TABLE_SHIFT);
     uint8_t index = color_indexes[hash];
     if (!memcmp(color_cache + index, sp, 4)) {
