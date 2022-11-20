@@ -5321,6 +5321,10 @@ qoir_private_swizzle__bgrp__rgbn(          //
     src_ptr += src_stride_in_bytes - (4 * width_in_pixels);
   }
 }
+static inline int rotl (int v,int c)
+{
+	return (v<<c)|(v>>(32-c));
+}
 
 // -------- LZ4 Decode
 
@@ -5434,13 +5438,13 @@ fail_invalid_data:
 
 // -------- LZ4 Encode
 
-#define QOIR_LZ4_HASH_TABLE_SHIFT 15
+#define QOIR_LZ4_HASH_TABLE_SHIFT 18
 
 static inline uint32_t  //
 qoir_lz4_private_hash(  //
     uint32_t x) {
   // 2654435761u is Knuth's magic constant.
-  return ((x + 131313 ) * 2654435761u) >> (32 - QOIR_LZ4_HASH_TABLE_SHIFT);
+  return ((x + 131313) * 0xCF1BBCDCB7A56463) >> (64 - QOIR_LZ4_HASH_TABLE_SHIFT);
 }
 
 static inline size_t                     //
@@ -5537,15 +5541,14 @@ qoir_lz4_block_encode(                     //
         match = src_ptr + *hash_table_entry;
         next_hash = qoir_lz4_private_hash(qoir_private_peek_u32le(next_sp));
         *hash_table_entry = (uint32_t)(sp - src_ptr);
-      } while (((sp - match) > 0xFFFF) ||
+      } while (((sp - match) > 0xFFFF) || 
                (qoir_private_peek_u32le(sp) != qoir_private_peek_u32le(match)));
 
       // Extend the match backwards.
       while ((sp > literal_start) && (match > src_ptr) &&
-             (sp[-1] == match[-1])) {
+             (sp[-1] == match[-1])  ) {
         sp--;
         match--;
-        next_sp++;
       }
 
       // Emit half of the LZ4 token, encoding the literal length. We'll fix up
@@ -6381,7 +6384,7 @@ fail_invalid_data:
 
 // -------- QOIR Encode
 
-#define QOIR_HASH_TABLE_SHIFT 15
+#define QOIR_HASH_TABLE_SHIFT 20
 
 static QOIR_ALWAYS_INLINE void  //
 qoir_private_encode_dither(     //
@@ -6414,10 +6417,6 @@ qoir_private_encode_dither(     //
   uint32_t u = upper;
   uint32_t m = ((256 * (p - l)) > (noise * (u - l))) ? u : l;
   *ptr = (uint8_t)(m >> lossiness);
-}
-static inline int rotl (int v,int c)
-{
-	return (v<<c)|(v>>(32-c));
 }
 
 static QOIR_ALWAYS_INLINE qoir_size_result  //
@@ -6516,8 +6515,8 @@ qoir_private_encode_tile_opcodes(           //
     }
 
     // 2654435761u is Knuth's magic constant.
-    uint32_t hash = (qoir_private_peek_u32le(sp) * (131313 + 123456791 + 2654435761u)) >>
-                    (32 - QOIR_HASH_TABLE_SHIFT);
+    uint32_t hash = (qoir_private_peek_u32le(sp) * (131313 + 123456791  +  0xCF1BBCDCB7A56463)) >>
+                    (64 - QOIR_HASH_TABLE_SHIFT);
     uint8_t index = color_indexes[hash];
     if (!memcmp(color_cache + index, sp, 4)) {
       *dp++ = (uint8_t)(0x00 | index);  // QOIR_OP_INDEX
