@@ -1,4 +1,4 @@
-// Copyright 2022 released by surya kandau.
+// Copyright 2022 nigel tao, surya kandau.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -5509,7 +5509,7 @@ qoir_lz4_block_encode(                     //
   // last match must start at least 12 bytes before the end of block" and other
   // file format details, such as the LZ4 token's bit patterns.
   if (src_len > 12) {
-    const uint8_t* const match_limit = src_ptr + src_len - 2;
+     uint8_t*  match_limit = src_ptr + src_len - 2;
     const size_t final_literals_limit = src_len - 5;
 
     // hash_table maps from QOIR_LZ4_HASH_TABLE_SHIFT-bit keys to 32-bit
@@ -5521,7 +5521,7 @@ qoir_lz4_block_encode(                     //
       // Start with 1-byte steps, accelerating when not finding any matches
       // (e.g. when compressing binary data, not text data).
       size_t step = 1;
-      size_t step_counter = 1 << 8;
+      size_t step_counter = 1 << 20;
 
       // Start with a non-empty literal.
       const uint8_t* next_sp = sp + 1;
@@ -5533,7 +5533,7 @@ qoir_lz4_block_encode(                     //
       do {
         sp = next_sp;
         next_sp += step;
-        step = step_counter++ >> 8;
+        step = step_counter++ >> 20;
         if (((size_t)(next_sp - src_ptr)) > final_literals_limit) {
           goto final_literals;
         }
@@ -5549,6 +5549,7 @@ qoir_lz4_block_encode(                     //
              (sp[-1] == match[-1])  ) {
         sp--;
         match--;
+        next_hash++;
       }
 
       // Emit half of the LZ4 token, encoding the literal length. We'll fix up
