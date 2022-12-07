@@ -1,5 +1,5 @@
 
-# qoirsk (qoir fork): a Simple, Lossless Image File Format
+# qoirsk (better compression ratio compared to qoir): a Simple, Lossless Image File Format
 (c) 2022 by surya kandau.
 qoirsk (pronounced like "choir") is simple, lossless image file format that is
 very fast to encode and decode while achieving compression ratios roughly
