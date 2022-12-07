@@ -5549,7 +5549,6 @@ qoir_lz4_block_encode(                     //
              (sp[-1] == match[-1])  ) {
         sp--;
         match--;
-        next_hash++;
       }
 
       // Emit half of the LZ4 token, encoding the literal length. We'll fix up
@@ -5580,7 +5579,7 @@ qoir_lz4_block_encode(                     //
         *dp++ = (uint8_t)(copy_off >> 0);
         *dp++ = (uint8_t)(copy_off >> 8);
         size_t adj_copy_len = qoir_lz4_private_longest_common_prefix(
-            4 + sp, 4 + match, match_limit);
+            4 + sp, 4 + match, match_limit+1);
         if (adj_copy_len < 15) {
           *token |= (uint8_t)adj_copy_len;
         } else {

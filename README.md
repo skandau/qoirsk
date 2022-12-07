@@ -100,7 +100,13 @@ j40_next_frame`.
 (3) means that the Wuffs decoder is a single file C library but there is no
 PNG/Wuffs encoder. The "compression ratio" numbers simply take the benchmark
 suite PNG images "as is" without re-encoding.
-
+   
+               qoir                qoirsk
+dice.png       337,811             333,374 
+fish.png       630,380             614,451
+clover.png     2,490,373           2,488,356
+grass1.png     2,661,762           2,661,422  
+ 
 qoirskv1:
                        input size    qoirsk     comp_time   decomp_time    
 kodim01.png            694,365       694,330    0.063s      0.125s    
