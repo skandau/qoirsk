@@ -5604,6 +5604,9 @@ qoir_lz4_block_encode(                     //
         hash_table[qoir_lz4_private_hash(qoir_private_peek_u32le(sp - 2))] =
             (uint32_t)(sp - 2 - src_ptr);
 
+        hash_table[qoir_lz4_private_hash(qoir_private_peek_u32le(sp - 1))] =
+            (uint32_t)(sp - 1 - src_ptr);
+
         // Check if this match can be followed immediately by another match.
         // If so, continue the loop. Otherwise, break.
         uint32_t* hash_table_entry =
