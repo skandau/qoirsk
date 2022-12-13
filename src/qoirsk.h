@@ -5447,6 +5447,13 @@ qoir_lz4_private_hash(  //
   return ((x + 131313) * 0xCF1BBCDCB7A56463) >> (64 - QOIR_LZ4_HASH_TABLE_SHIFT);
 }
 
+static inline uint32_t  //
+qoir_lz4_private_hash1(  //
+    uint32_t x) {
+  // 2654435761u is Knuth's magic constant.
+  return ((x + 131313) * 2654435761u ) >> (32 - QOIR_LZ4_HASH_TABLE_SHIFT);
+}
+
 static inline size_t                     //
 qoir_lz4_private_longest_common_prefix(  //
     const uint8_t* p,                    //
@@ -5510,7 +5517,7 @@ qoir_lz4_block_encode(                     //
   // file format details, such as the LZ4 token's bit patterns.
   if (src_len > 12) {
      uint8_t*  match_limit = src_ptr + src_len - 2;
-    const size_t final_literals_limit = src_len - 5;
+    const size_t final_literals_limit = src_len - 4;
 
     // hash_table maps from QOIR_LZ4_HASH_TABLE_SHIFT-bit keys to 32-bit
     // values. Each value is an offset o, relative to src_ptr, initialized to
@@ -5601,12 +5608,31 @@ qoir_lz4_block_encode(                     //
         // We've skipped over hashing everything within the match. Also, the
         // minimum match length is 4. Update the hash table for one of those
         // skipped positions.
+            
+        hash_table[qoir_lz4_private_hash(qoir_private_peek_u32le(sp - 10))] =
+            (uint32_t)(sp - 10 - src_ptr);
+        hash_table[qoir_lz4_private_hash(qoir_private_peek_u32le(sp - 9))] =
+            (uint32_t)(sp - 9 - src_ptr);
+        hash_table[qoir_lz4_private_hash(qoir_private_peek_u32le(sp - 8))] =
+            (uint32_t)(sp - 8 - src_ptr);
+        hash_table[qoir_lz4_private_hash(qoir_private_peek_u32le(sp - 7))] =
+            (uint32_t)(sp - 7 - src_ptr);
+
+        hash_table[qoir_lz4_private_hash(qoir_private_peek_u32le(sp - 6))] =
+            (uint32_t)(sp - 6 - src_ptr);
+        hash_table[qoir_lz4_private_hash(qoir_private_peek_u32le(sp - 5))] =
+            (uint32_t)(sp - 5 - src_ptr);
+
+            
+        hash_table[qoir_lz4_private_hash(qoir_private_peek_u32le(sp - 4))] =
+            (uint32_t)(sp - 4 - src_ptr);
+        hash_table[qoir_lz4_private_hash(qoir_private_peek_u32le(sp - 3))] =
+            (uint32_t)(sp - 3 - src_ptr);
         hash_table[qoir_lz4_private_hash(qoir_private_peek_u32le(sp - 2))] =
             (uint32_t)(sp - 2 - src_ptr);
-
         hash_table[qoir_lz4_private_hash(qoir_private_peek_u32le(sp - 1))] =
             (uint32_t)(sp - 1 - src_ptr);
-
+    
         // Check if this match can be followed immediately by another match.
         // If so, continue the loop. Otherwise, break.
         uint32_t* hash_table_entry =
